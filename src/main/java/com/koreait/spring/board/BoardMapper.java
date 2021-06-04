@@ -6,5 +6,6 @@ import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-    List<boardDomain> boardList();
+    List<BoardDomain> boardList();
+    BoardDomain boardDetail(BoardDTO param);
 }

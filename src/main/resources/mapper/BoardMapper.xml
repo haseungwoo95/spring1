@@ -12,4 +12,11 @@
         ORDER BY A.iboard DESC
     </select>
 
+    <select id="boardDetail" resultType="BoardDomain">
+        SELECT A.iboard, A.title, A.regdt, A.ctnt, B.unm as writerNm, B.profileImg
+        FROM t_board A
+        INNER  JOIN t_user B
+        ON A.iuser = B.iuser
+        WHERE A.iboard = #{iboard}
+    </select>
 </mapper>

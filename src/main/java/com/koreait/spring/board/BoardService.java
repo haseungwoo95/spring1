@@ -11,7 +11,11 @@ public class BoardService {
     @Autowired
     private BoardMapper mapper;
 
-    public List<boardDomain> boardList(){
+    public List<BoardDomain> boardList(){
         return mapper.boardList();
+    }
+
+    public BoardDomain boardDetail(BoardDTO param){
+        return mapper.boardDetail(param);
     }
 }
