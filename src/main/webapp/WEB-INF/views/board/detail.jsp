@@ -21,6 +21,6 @@
             </form>
         </div>
     </c:if>
-    <div id="cmtList" data-login_user-pk="${sessionScope.loginUser.iuser}" data-iboard="${param.iboard}"></div>
+    <div id="cmtList" data-login-user-pk="${sessionScope.loginUser.iuser}" data-iboard="${param.iboard}"></div>
 </body>
 </html>

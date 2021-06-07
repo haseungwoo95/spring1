@@ -20,9 +20,13 @@ function regCmt() {
 function regAjax(param) {
 	const init = {
 		method: 'POST',
-		body: JSON.stringify(param)
-		};
-		fetch('cmtInsSel', init)
+		body: JSON.stringify(param),
+		headers:{
+			'accept' : 'application/json',
+			'content-type' : 'application/json;charset=UTF-8'
+		}
+	};
+		fetch('cmtIns', init)
 		.then(function(res){
 			return res.json();
 		})	
@@ -44,7 +48,7 @@ function regAjax(param) {
 function getListAjax() {
 	var iboard = cmtListElem.dataset.iboard;
 	
-	fetch('cmtInsSel?iboard=' + iboard)
+	fetch('cmtSel?iboard=' + iboard)
 	.then(function(res){
 		return res.json();
 	})
@@ -78,7 +82,7 @@ function makeCmtElemList(data) {
 
 	cmtListElem.append(tableElem);
 	
-	var loginUserPk = cmtListElem.dataset.login_user_pk;
+	var loginUserPk = cmtListElem.dataset.loginUserPk;
 	
 	data.forEach(function(item){
 		var trElemItem = document.createElement('tr');
@@ -124,14 +128,14 @@ function makeCmtElemList(data) {
 }
 
 function delAjax(icmt){
-	fetch('cmtDelUpd?icmt=' + icmt)
+	fetch('cmtDel?icmt=' + icmt)
 	.then(function(res){
 		return res.json();
 	})
 	.then(function(data){ "{result: 0}"
 		console.log(data);
 		
-		switch(data.result){
+		switch(data){
 			case 0:
 				alert('댓글 삭제를 실패하였습니다.');
 			break;
@@ -149,15 +153,19 @@ function modAjax(){
 	}
 	const init = {
 		method: 'POST',
-		body: JSON.stringify(param)
+		body: JSON.stringify(param),
+		headers:{
+			'accept' : 'application/json',
+			'content-type' : 'application/json;charset=UTF-8'
+		}
 		};
-		fetch('cmtDelUpd', init)
+		fetch('cmtUpd', init)
 		.then(function(res){
 			return res.json();
 		})	
-		.then(function(myJson){
-			console.log(myJson);
-			switch(myJson.result){
+		.then(function(result){
+			console.log(result);
+			switch(result){
 				case 0:
 					alert('댓글 수정 실패!');
 				break;

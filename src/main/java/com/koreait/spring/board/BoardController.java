@@ -35,14 +35,38 @@ public class BoardController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/cmtInsSel", method = RequestMethod.POST)
+    @RequestMapping(value = "/cmtIns", method = RequestMethod.POST)
     public Map<String, Integer> cmtInsSel(@RequestBody BoardCmtEntity param){
+        System.out.println("cmtIns param : " + param);
+
+        int result = service.insBoardCmt(param);
 
         Map<String, Integer> data = new HashMap<>();
-        data.put("result", 1);
+        data.put("result", result);
         return data;
     }
 
+    @ResponseBody
+    @RequestMapping("/cmtSel")
+    public List<BoardCmtDomain> cmtSel(BoardCmtEntity param){
+        System.out.println("cmtSel param : " + param);
+        return service.selBoardCmtList(param);
+    }
 
+    @ResponseBody
+    @RequestMapping("/cmtDel")
+    public int cmtDel(BoardCmtEntity param){
+        int result = service.delBoardCmt(param);
+        System.out.println("result : " + result);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/cmtUpd")
+    public int cmtUpd(BoardCmtEntity param){
+        int result = service.updBoardCmt(param);
+        System.out.println("result : " + result);
+        return result;
+    }
 }
 
