@@ -10,7 +10,8 @@
 </head>
 <body>
     <h1>리스트</h1>
-    <div>로그인 아이디 : ${sessionScope.loginUser.uid}</div>
+    <div>로그인 아이디 : ${sessionScope.loginUser.uid}(${sessionScope.loginUser.unm})</div>
+    <span><a href="/user/profile">프로필</a></span>
     <table>
         <tr>
             <th>번호</th>
@@ -34,7 +35,7 @@
                         <c:set var="img" value="/res/img/hu.jpg" />
                     </c:when>
                     <c:otherwise>
-                        <c:set var="img" value="/res/img/user/${item.iuser }/${item.profileImg }" />
+                        <c:set var="img" value="/img/${sessionScope.loginUser.iuser}/${sessionScope.loginUser.profileImg }" />
                     </c:otherwise>
                 </c:choose>
                 <td>

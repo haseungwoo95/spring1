@@ -26,7 +26,7 @@ function regAjax(param) {
 			'content-type' : 'application/json;charset=UTF-8'
 		}
 	};
-		fetch('cmtIns', init)
+		fetch('cmt', init)
 		.then(function(res){
 			return res.json();
 		})	
@@ -34,11 +34,11 @@ function regAjax(param) {
 			console.log(myJson);
 			switch(myJson.result){
 				case 0:
-					alert('등록 실패!');
+					alert('댓글 등록 실패!');
 				break;
 				case 1:
 					cmtFrmElem.cmt.value='';
-					alert('등록 완료!');
+					alert('댓글 등록 완료!');
 					getListAjax();
 				break;
 			}
@@ -48,7 +48,7 @@ function regAjax(param) {
 function getListAjax() {
 	var iboard = cmtListElem.dataset.iboard;
 	
-	fetch('cmtSel?iboard=' + iboard)
+	fetch('cmt/' + iboard)
 	.then(function(res){
 		return res.json();
 	})
@@ -128,14 +128,14 @@ function makeCmtElemList(data) {
 }
 
 function delAjax(icmt){
-	fetch('cmtDel?icmt=' + icmt)
+	fetch('cmt/' + icmt, {method: 'DELETE'})
 	.then(function(res){
 		return res.json();
 	})
-	.then(function(data){ "{result: 0}"
+	.then(function(data){
 		console.log(data);
 		
-		switch(data){
+		switch(data.result){
 			case 0:
 				alert('댓글 삭제를 실패하였습니다.');
 			break;
@@ -151,28 +151,28 @@ function modAjax(){
 		icmt: cmtModFrmElem.icmt.value,
 		cmt: cmtModFrmElem.cmt.value
 	}
+	console.log(param)
 	const init = {
-		method: 'POST',
+		method: 'PUT',
 		body: JSON.stringify(param),
 		headers:{
 			'accept' : 'application/json',
 			'content-type' : 'application/json;charset=UTF-8'
 		}
 		};
-		fetch('cmtUpd', init)
+		fetch('cmt', init)
 		.then(function(res){
 			return res.json();
 		})	
-		.then(function(result){
-			console.log(result);
-			switch(result){
+		.then(function(data){
+			console.log(data);
+			closeModModal();
+			switch(data.result){
 				case 0:
 					alert('댓글 수정 실패!');
 				break;
 				case 1:
-					cmtFrmElem.cmt.value='';
 					alert('댓글 수정 완료!');
-					closeModModal();
 					getListAjax();
 				break;
 			}
