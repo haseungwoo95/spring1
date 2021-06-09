@@ -33,6 +33,19 @@ public class BoardController {
         return "board/detail";
     }
 
+    //게시글 작성
+    @GetMapping("/writeMod")
+    public void writeMod(){
+
+    }
+
+    //게시글 작성
+    @PostMapping("/writeMod")
+    public String writeMod(BoardEntity param){
+        int iboard = service.writeMod(param);
+        return "redirect:detail?iboard=" + iboard;
+    }
+
     //댓글 삽입
     @ResponseBody
     @RequestMapping(value = "/cmt", method = RequestMethod.POST)

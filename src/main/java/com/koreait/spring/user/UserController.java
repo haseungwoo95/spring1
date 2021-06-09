@@ -3,12 +3,10 @@ package com.koreait.spring.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller //빈 등록, 주소값과 매핑이 가능
@@ -22,7 +20,7 @@ public class UserController {
     private HttpSession session;
 
     @RequestMapping(value = "/login")
-    public String login(@RequestParam(value="err", required = false, defaultValue="0") int err, Model model){
+    public void login(@RequestParam(value="err", required = false, defaultValue="0") int err, Model model){
         switch (err){
             case 1://아이디 없음
                 model.addAttribute("errMsg","아이디 확인해라");
@@ -31,7 +29,6 @@ public class UserController {
                 model.addAttribute("errMsg","비밀번호 확인해라");
                 break;
         }
-        return "user/login";
     }
 
     @RequestMapping(value = "/login", method=RequestMethod.POST)
@@ -41,7 +38,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/join")
-    public String join(){ return "user/join"; }
+    public void join(){
+
+    }
 
     @RequestMapping(value = "/join", method= RequestMethod.POST)
     public String join(UserEntity param){
@@ -50,9 +49,15 @@ public class UserController {
         return "redirect:/user/login";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession hs, HttpServletRequest req){
+        hs.invalidate();
+        String referer = req.getHeader("Referer");//로그아웃 시도한 페이지
+        return "redirect:" + referer;
+    }
     @RequestMapping("/profile")
-    public String profile(){
-        return "user/profile";
+    public void profile(){
+
     }
 
     @PostMapping(value = "/profile")

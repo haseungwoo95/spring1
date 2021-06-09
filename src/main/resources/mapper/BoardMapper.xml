@@ -4,8 +4,15 @@
 
 <mapper namespace="com.koreait.spring.board.BoardMapper">
 
+    <insert id="insBoard">
+        INSERT INTO t_board
+        (title, ctnt, iuser)
+        VALUES
+        (#{title}, #{ctnt}, #{iuser})
+    </insert>
+
     <select id="boardList" resultType="BoardDomain">
-        SELECT A.iboard, A.title, A.regdt, B.unm as writerNm, B.profileImg
+        SELECT A.iboard, A.title, A.regdt, B.unm as writerNm, B.profileImg, B.iuser
         FROM t_board A
         INNER  JOIN t_user B
         ON A.iuser = B.iuser

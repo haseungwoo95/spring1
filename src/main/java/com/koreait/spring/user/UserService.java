@@ -51,6 +51,12 @@ public class UserService {
         File target = new File(PATH + "/" + fileNm);
         try {
             img.transferTo(target);
+
+            //이전 이미지 삭제
+            File delFile = new File(PATH + "/" + loginUser.getProfileImg());
+            if(delFile.exists()){
+                delFile.delete();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
