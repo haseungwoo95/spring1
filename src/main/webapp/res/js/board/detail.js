@@ -2,6 +2,7 @@ var cmtFrmElem = document.querySelector('#cmtFrm');
 var cmtListElem = document.querySelector('#cmtList');
 var cmtModModalElem = document.querySelector('#modal');
 var cmtModFrmElem = document.querySelector('#cmtModFrm');
+var favIconElem = document.querySelector('#favIcon');
 
 function enterInsCmt(){
 	if(window.event.keyCode == 13){
@@ -189,5 +190,80 @@ function closeModModal(){
 	cmtModModalElem.className = 'displayNone';
 }
 
+favIconElem.addEventListener('click',function (){
+	if(favIconElem.classList.contains('far')){//좋아요 처리
+		insFavAjax();
+	} else{ //좋아요 해제
+		delFavAjax();
+	}
+});
+
+//좋아요 처리
+function insFavAjax(){
+	const param = {
+		iboard: cmtListElem.dataset.iboard
+	}
+	const init = {
+		method: 'POST',
+		body: JSON.stringify(param),
+		headers:{
+			'accept' : 'application/json',
+			'content-type' : 'application/json;charset=UTF-8'
+		}
+	};
+	fetch('fav', init)
+		.then(function (res){
+			return res.json();
+		})
+		.then(function (myJson){
+			if(myJson.result === 1){
+				toggleFav(1);
+			}
+		})
+}
+
+//좋아요 취소
+function delFavAjax(){
+	const init = {
+		method: 'DELETE'
+	}
+	const iboard = cmtListElem.dataset.iboard;
+
+	fetch('fav?iboard=' + iboard, init)
+		.then(function (res){
+			return res.json();
+		})
+		.then(function (myJson){
+			if(myJson.result === 1){
+				toggleFav(0);
+			}
+		})
+}
+
+//좋아요 여부 값 가져오기
+function getFavAjax(){
+	fetch('fav?iboard=' + cmtListElem.dataset.iboard)
+		.then(function(res){
+			return res.json();
+		})
+		.then(function(myJson) {
+			console.log(myJson);
+			toggleFav(myJson.result);
+		});
+}
+
+function toggleFav(toggle){
+	switch (toggle) {
+		case 0://좋아요 x
+			favIconElem.classList.remove('fas');
+			favIconElem.classList.add('far');
+			break;
+		case 1://좋아요 o
+			favIconElem.classList.remove('far');
+			favIconElem.classList.add('fas');
+			break;
+	}
+}
 //이 파일이 임포트되면 함수 1회 호출
 getListAjax();
+getFavAjax();

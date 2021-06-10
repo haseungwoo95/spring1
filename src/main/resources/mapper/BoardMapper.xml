@@ -4,13 +4,23 @@
 
 <mapper namespace="com.koreait.spring.board.BoardMapper">
 
-    <insert id="insBoard">
+    <insert id="insBoard" useGeneratedKeys="true" keyProperty="iboard">
         INSERT INTO t_board
         (title, ctnt, iuser)
         VALUES
         (#{title}, #{ctnt}, #{iuser})
     </insert>
 
+    <update id="updBoard">
+        UPDATE t_board
+        SET title = #{title}, ctnt = #{ctnt}
+        WHERE iboard = #{iboard} AND iuser = #{iuser}
+    </update>
+
+    <delete id="delBoard">
+        DELETE FROM t_board
+        WHERE iboard = #{iboard} AND iuser = #{iuser}
+    </delete>
     <select id="boardList" resultType="BoardDomain">
         SELECT A.iboard, A.title, A.regdt, B.unm as writerNm, B.profileImg, B.iuser
         FROM t_board A

@@ -8,4 +8,7 @@ import java.util.List;
 public interface BoardMapper {
     List<BoardDomain> boardList();
     BoardDomain boardDetail(BoardDTO param);
+    int insBoard(BoardEntity param);
+    int updBoard(BoardEntity param);
+    int delBoard(BoardEntity param);
 }
