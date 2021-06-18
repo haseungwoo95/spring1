@@ -1,5 +1,7 @@
 package com.koreait.spring.board;
 
+import com.koreait.spring.cmt.BoardCmtDomain;
+import com.koreait.spring.cmt.BoardCmtEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +20,9 @@ public class BoardController {
 
     //리스트
     @RequestMapping("/list")
-    public String list(Model model){
-        List<BoardDomain> list = service.boardList();
+    public String list(BoardDTO param, Model model){
+        List<BoardDomain> list = service.boardList(param);
+        model.addAttribute("page", service.selMaxPageVal(param));
         model.addAttribute("list", list);
         return "board/list";
     }
@@ -96,6 +99,11 @@ public class BoardController {
         Map<String, Integer> data = new HashMap<>();
         data.put("result", result);
         return data;
+    }
+
+    @GetMapping("/favList")
+    public void favList(){
+
     }
 }
 

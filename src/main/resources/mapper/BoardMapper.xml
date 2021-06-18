@@ -6,34 +6,93 @@
 
     <insert id="insBoard" useGeneratedKeys="true" keyProperty="iboard">
         INSERT INTO t_board
-        (title, ctnt, iuser)
-        VALUES
-        (#{title}, #{ctnt}, #{iuser})
+            (title, ctnt, iuser)
+        VALUES (#{title}, #{ctnt}, #{iuser})
     </insert>
 
     <update id="updBoard">
         UPDATE t_board
-        SET title = #{title}, ctnt = #{ctnt}
-        WHERE iboard = #{iboard} AND iuser = #{iuser}
+        SET title = #{title},
+            ctnt  = #{ctnt}
+        WHERE iboard = #{iboard}
+          AND iuser = #{iuser}
     </update>
 
     <delete id="delBoard">
-        DELETE FROM t_board
-        WHERE iboard = #{iboard} AND iuser = #{iuser}
+        DELETE
+        FROM t_board
+        WHERE iboard = #{iboard}
+          AND iuser = #{iuser}
     </delete>
-    <select id="boardList" resultType="BoardDomain">
-        SELECT A.iboard, A.title, A.regdt, B.unm as writerNm, B.profileImg, B.iuser
-        FROM t_board A
-        INNER  JOIN t_user B
+
+    <select id="selMaxPageVal" resultType="_int">
+        SELECT CEIL(COUNT(A.iboard) / #{recordCnt}) FROM t_board A
+        INNER JOIN t_user B
         ON A.iuser = B.iuser
+        <if test="selType eq 1">
+            INNER JOIN t_board_fav C
+            ON A.iboard = C.iboard
+            AND C.iuser = #{iuser}
+        </if>
+        <if test="searchType eq 1">
+            WHERE A.title LIKE concat("%",#{searchText},"%") OR A.ctnt LIKE concat("%",#{searchText},"%")
+        </if>
+        <if test="searchType eq 2">
+            WHERE A.title LIKE concat("%",#{searchText},"%")
+        </if>
+        <if test="searchType eq 3">
+            WHERE A.ctnt LIKE concat("%",#{searchText},"%")
+        </if>
+        <if test="searchType eq 4">
+            WHERE B.unm LIKE concat("%",#{searchText},"%")
+        </if>
+    </select>
+
+    <select id="boardList" resultType="BoardDomain">
+        SELECT A.iboard
+             , A.title
+             , A.regdt
+             , A.iuser
+             , B.unm AS writerNm
+             , B.profileImg
+             , CASE
+                   WHEN C.iboard IS NULL
+                       THEN 0
+                   ELSE 1
+            END AS isFav
+        FROM t_board A
+        INNER join t_user B
+        ON A.iuser = B.iuser
+        <if test="selType eq 0">
+            LEFT JOIN t_board_fav C
+        </if>
+        <if test="selType eq 1">
+            INNER JOIN t_board_fav C
+        </if>
+        ON A.iboard = C.iboard AND C.iuser = #{iuser}
+        <if test="searchType eq 1">
+            WHERE A.title LIKE concat("%",#{searchText},"%") OR A.ctnt LIKE concat("%",#{searchText},"%")
+        </if>
+        <if test="searchType eq 2">
+            WHERE A.title LIKE concat("%",#{searchText},"%")
+        </if>
+        <if test="searchType eq 3">
+            WHERE A.ctnt LIKE concat("%",#{searchText},"%")
+        </if>
+        <if test="searchType eq 4">
+            WHERE B.unm LIKE concat("%",#{searchText},"%")
+        </if>
         ORDER BY A.iboard DESC
+        <if test="recordCnt > 0">
+            LIMIT #{startIdx}, #{recordCnt}
+        </if>
     </select>
 
     <select id="boardDetail" resultType="BoardDomain">
         SELECT A.iuser, A.iboard, A.title, A.regdt, A.ctnt, B.unm as writerNm, B.profileImg
         FROM t_board A
-        INNER  JOIN t_user B
-        ON A.iuser = B.iuser
+                 INNER JOIN t_user B
+                            ON A.iuser = B.iuser
         WHERE A.iboard = #{iboard}
     </select>
 </mapper>

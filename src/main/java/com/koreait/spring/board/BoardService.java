@@ -1,6 +1,11 @@
 package com.koreait.spring.board;
 
 import com.koreait.spring.MyUtils;
+import com.koreait.spring.cmt.BoardCmtDomain;
+import com.koreait.spring.cmt.BoardCmtEntity;
+import com.koreait.spring.cmt.BoardCmtMapper;
+import com.koreait.spring.fav.BoardFavEntity;
+import com.koreait.spring.fav.BoardFavMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +21,22 @@ public class BoardService {
     private BoardCmtMapper cmtMapper;
 
     @Autowired
+    private BoardFavMapper favMapper;
+
+    @Autowired
     private MyUtils myUtils;
 
-    public List<BoardDomain> boardList(){
-        return mapper.boardList();
+    public List<BoardDomain> boardList(BoardDTO param){
+        param.setIuser(myUtils.getLoginUserPk());
+
+        int startIdx = (param.getPage() - 1) * param.getRecordCnt();
+        param.setStartIdx(startIdx);
+
+        return mapper.boardList(param);
+    }
+
+    public int selMaxPageVal(BoardDTO param){
+        return mapper.selMaxPageVal(param);
     }
 
     public BoardDomain boardDetail(BoardDTO param){
@@ -45,8 +62,12 @@ public class BoardService {
         cmtParam.setIboard(param.getIboard());
         cmtMapper.delBoardCmt(cmtParam);
 
+        BoardFavEntity favparam = new BoardFavEntity();
+        favparam.setChkfav(0);
+        favparam.setIboard(param.getIboard());
+        favMapper.delBoardFav(favparam);
+
         param.setIuser(myUtils.getLoginUserPk());
-        System.out.println("dels param" + param);
         return mapper.delBoard(param);
     }
 

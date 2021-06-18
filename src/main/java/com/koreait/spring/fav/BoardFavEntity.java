@@ -1,4 +1,4 @@
-package com.koreait.spring.board;
+package com.koreait.spring.fav;
 
 import lombok.Data;
 
@@ -7,4 +7,5 @@ public class BoardFavEntity {
     private int iboard;
     private int iuser;
     private String regdt;
+    private int chkfav;
 }

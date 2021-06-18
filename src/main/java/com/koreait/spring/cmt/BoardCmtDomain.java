@@ -1,4 +1,4 @@
-package com.koreait.spring.board;
+package com.koreait.spring.cmt;
 
 import lombok.Getter;
 import lombok.Setter;

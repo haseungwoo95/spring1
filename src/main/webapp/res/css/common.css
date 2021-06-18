@@ -1,5 +1,9 @@
 @charset "UTF-8";
 html, body, ul { margin: 0; padding: 0; }
+a {
+	text-decoration: none;
+	color: black;
+}
 header ul {
 	list-style-type: none;
 	margin: 0;
@@ -32,3 +36,5 @@ section { padding-left: 40px; padding-right: 40px;}
 
 .fa-kiss-wink-heart{ color:  #e74c3c; }
 .pointer { cursor: pointer; }
+
+.selected { color: #e74c3c; font-weight: bold;}
